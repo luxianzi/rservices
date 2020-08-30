@@ -1,10 +1,3 @@
-/*
- * AbstractMessageQueue.h
- *
- *  Created on: 2020��8��16��
- *      Author: Luxianzi
- */
-
 #ifndef ABSTRACTMESSAGEQUEUE_H_
 #define ABSTRACTMESSAGEQUEUE_H_
 
@@ -17,20 +10,23 @@ using namespace std;
 
 class AbstractMessageQueue {
 public:
-	const string kDownStreamSuffix = "_in";
-	const string kUpStreamSuffix = "_out";
-	const unsigned int kMaxMessageNumber = 16;
-	const unsigned int kMaxMessageSize = 4096;
+	static const constexpr char* kDownStreamSuffix = "_in";
+	static const constexpr char* kUpStreamSuffix = "_out";
+	static const unsigned int kMaxMessageNumber = 16;
+	static const unsigned int kMaxMessageSize = 4096;
 
-	AbstractMessageQueue(string& name) :
+	AbstractMessageQueue(const string& name) :
 		name_(name) {}
-	virtual ~AbstractMessageQueue();
+	virtual ~AbstractMessageQueue() {}
 
-	virtual error_condition Send(Message& message) = 0;
+	virtual error_condition Send(const Message& message) = 0;
 	virtual error_condition Receive(Message& message) = 0;
 	virtual error_condition EmptyDownStream() = 0;
-	virtual string GetName() {
-		return name_;
+	virtual string GetUpStreamName() {
+		return name_ + kUpStreamSuffix;
+	}
+	virtual string GetDownStreamName() {
+		return name_ + kDownStreamSuffix;
 	}
 
 private:

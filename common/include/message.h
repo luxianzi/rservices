@@ -1,10 +1,3 @@
-/*
- * Message.h
- *
- *  Created on: 2020Äê8ÔÂ16ÈÕ
- *      Author: Luxianzi
- */
-
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
@@ -39,11 +32,16 @@ public:
 	Message(const vector<uint8_t>& buffer);
 	virtual ~Message();
 
-	virtual error_condition SetItem(const string key, const int value);
-	virtual error_condition SetItem(const string key, const bool value);
-	virtual error_condition SetItem(const string key, const double value);
-	virtual error_condition SetItem(const string key, const string& value);
-	virtual error_condition SetItem(const string key, const vector<uint8_t>& value);
+	virtual error_condition SetItem(const string key, const int value, \
+			const bool force = false);
+	virtual error_condition SetItem(const string key, const bool value, \
+			const bool force = false);
+	virtual error_condition SetItem(const string key, const double value, \
+			const bool force = false);
+	virtual error_condition SetItem(const string key, const string& value, \
+			const bool force = false);
+	virtual error_condition SetItem(const string key, \
+			const vector<uint8_t>& value, const bool force = false);
 
 	virtual error_condition QueryItem(const string key, int& result);
 	virtual error_condition QueryItem(const string key, bool& result);
@@ -63,7 +61,7 @@ public:
 	virtual string GetDestination();
 	virtual int GetID();
 
-	virtual vector<uint8_t> GetRawMessage();
+	virtual vector<uint8_t> GetRawMessage() const;
 	virtual error_condition ParseRawMessage(const vector<uint8_t>& buffer);
 
 protected:
@@ -76,12 +74,12 @@ protected:
 	virtual bool IsReservedKey(const string& key);
 
 private:
-	const string kUnknown = "unknown";
-	const string kBroadcasting = "broadcasting";
-	const string kType = "type";
-	const string kSource = "source";
-	const string kDestination = "destination";
-	const string kID = "id";
+	static const constexpr char* kUnknown = "unknown";
+	static const constexpr char* kBroadcasting = "broadcasting";
+	static const constexpr char* kType = "type";
+	static const constexpr char* kSource = "source";
+	static const constexpr char* kDestination = "destination";
+	static const constexpr char* kID = "id";
 	const vector<string> kReservedKeys = {
 		kBroadcasting,
 		kType,

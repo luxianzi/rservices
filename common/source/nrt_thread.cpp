@@ -1,12 +1,10 @@
-/*
- * NRTThread.cpp
- *
- *  Created on: 2020��8��23��
- *      Author: Luxianzi
- */
-
 #include <iostream>
 #include "nrt_thread.h"
+
+NRTThread::NRTThread() :
+	AbstractThread() {
+
+}
 
 NRTThread::NRTThread(WorkFunction work) :
 	AbstractThread(work) {

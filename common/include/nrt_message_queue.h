@@ -1,10 +1,3 @@
-/*
- * NRTMessageQueue.h
- *
- *  Created on: 2020��8��23��
- *      Author: Luxianzi
- */
-
 #ifndef NRTMESSAGEQUEUE_H_
 #define NRTMESSAGEQUEUE_H_
 
@@ -15,10 +8,10 @@ class NRTMessageQueue: public AbstractMessageQueue {
 public:
 	const unsigned int kNormalPriority = 50;
 
-	NRTMessageQueue(string& name);
+	NRTMessageQueue(const string& name);
 	virtual ~NRTMessageQueue();
 
-	virtual error_condition Send(Message& message);
+	virtual error_condition Send(const Message& message);
 	virtual error_condition Receive(Message& message);
 	virtual error_condition EmptyDownStream();
 

@@ -1,10 +1,3 @@
-/*
- * NRTThread.h
- *
- *  Created on: 2020��8��23��
- *      Author: Luxianzi
- */
-
 #ifndef NRTTHREAD_H_
 #define NRTTHREAD_H_
 
@@ -16,6 +9,7 @@ using namespace std;
 
 class NRTThread: public AbstractThread {
 public:
+	NRTThread();
 	NRTThread(WorkFunction work);
 	virtual ~NRTThread();
 

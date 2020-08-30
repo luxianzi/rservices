@@ -1,10 +1,3 @@
-/*
- * AbstractMessage.cpp
- *
- *  Created on: 2020��8��16��
- *      Author: Luxianzi
- */
-
 #include <algorithm>
 #include "message.h"
 #include "message_parse_fsm.h"
@@ -27,40 +20,45 @@ Message::~Message() {
 	// TODO Auto-generated destructor stub
 }
 
-error_condition Message::SetItem(const string key, const int value) {
-	if (IsReservedKey(key))
+error_condition Message::SetItem(const string key, const int value, \
+		const bool force) {
+	if (!force && IsReservedKey(key))
 		return make_error_condition(ErrorCode::kKeyReserved);
 	MessageItem item(key, kInteger, CastToVector(value));
 	SetOrReplaceItem(item);
 	return kNoError;
 }
 
-error_condition Message::SetItem(const string key, const bool value) {
-	if (IsReservedKey(key))
+error_condition Message::SetItem(const string key, const bool value, \
+		const bool force) {
+	if (!force && IsReservedKey(key))
 		return make_error_condition(ErrorCode::kKeyReserved);
 	MessageItem item(key, kBool, CastToVector(value));
 	SetOrReplaceItem(item);
 	return kNoError;
 }
 
-error_condition Message::SetItem(const string key, const double value) {
-	if (IsReservedKey(key))
+error_condition Message::SetItem(const string key, const double value, \
+		const bool force) {
+	if (!force && IsReservedKey(key))
 		return make_error_condition(ErrorCode::kKeyReserved);
 	MessageItem item(key, kDouble, CastToVector(value));
 	SetOrReplaceItem(item);
 	return kNoError;
 }
 
-error_condition Message::SetItem(const string key, const string& value) {
-	if (IsReservedKey(key))
+error_condition Message::SetItem(const string key, const string& value, \
+		const bool force) {
+	if (!force && IsReservedKey(key))
 		return make_error_condition(ErrorCode::kKeyReserved);
 	MessageItem item(key, kString, CastToVector(value));
 	SetOrReplaceItem(item);
 	return kNoError;
 }
 
-error_condition Message::SetItem(const string key, const vector<uint8_t>& value) {
-	if (IsReservedKey(key))
+error_condition Message::SetItem(const string key, \
+		const vector<uint8_t>& value, const bool force) {
+	if (!force && IsReservedKey(key))
 		return make_error_condition(ErrorCode::kKeyReserved);
 	MessageItem item(key, kData, value);
 	SetOrReplaceItem(item);
@@ -110,24 +108,24 @@ error_condition Message::QueryItem(const string key, vector<uint8_t>& result) {
 }
 
 void Message::SetBroadcasting(const bool value) {
-	SetItem(kBroadcasting, value);
+	SetItem(kBroadcasting, value, true);
 }
 
 void Message::SetType(const Type value) {
-	SetItem(kType, value);
+	SetItem(kType, value, true);
 }
 
 void Message::SetSource(const string& value) {
-	SetItem(kSource, value);
+	SetItem(kSource, value, true);
 
 }
 
 void Message::SetDestination(const string& value) {
-	SetItem(kDestination, value);
+	SetItem(kDestination, value, true);
 }
 
 void Message::SetID(const int value) {
-	SetItem(kID, value);
+	SetItem(kID, value, true);
 }
 
 bool Message::IsBroadcasting() {
@@ -172,7 +170,7 @@ int Message::GetID() {
 //     data_length: uint32_t
 //     data: array of uint8_t
 
-vector<uint8_t> Message::GetRawMessage() {
+vector<uint8_t> Message::GetRawMessage() const {
 	vector<uint8_t> buffer;
 	for (auto iter : items_) {
 		string key = get<0>(iter);
@@ -182,7 +180,9 @@ vector<uint8_t> Message::GetRawMessage() {
 		buffer.push_back(key.size() < 255 ? key.size() : 255);
 		buffer.insert(buffer.end(), key.begin(), key.end());
 		buffer.push_back(parameter_type);
-		buffer.insert(buffer.end(), &data_length, &data_length + sizeof(uint32_t));
+		buffer.insert(buffer.end(), reinterpret_cast<uint8_t*>(&data_length), \
+				reinterpret_cast<uint8_t*>(&data_length) + sizeof(uint32_t));
+		buffer.insert(buffer.end(), data.begin(), data.end());
 	}
 	return buffer;
 }
@@ -191,7 +191,16 @@ error_condition Message::ParseRawMessage(const vector<uint8_t>& buffer) {
 	MessageParseFSM fsm;
 
 	fsm.start();
-	fsm.process_event(0);
+	fsm.process_event(EventInit(buffer, items_));
+	msmf::state<>* state;
+	do {
+		fsm.process_event(EventTransit());
+		state = static_cast<msmf::state<>*>(fsm.get_state_by_id(*fsm.current_state()));
+	} while (state == fsm.get_state<MessageParseFSM::StateGetMessageItem*>());
+
+	if (state == fsm.get_state<MessageParseFSM::StateError*>())
+		return make_error_condition(ErrorCode::kMessageParseError);
+
 	return kNoError;
 }
 

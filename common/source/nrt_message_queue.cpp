@@ -1,18 +1,11 @@
-/*
- * NRTMessageQueue.cpp
- *
- *  Created on: 2020��8��23��
- *      Author: Luxianzi
- */
-
 #include "nrt_message_queue.h"
 #include "error_category.h"
 
-NRTMessageQueue::NRTMessageQueue(string& name) :
+NRTMessageQueue::NRTMessageQueue(const string& name) :
 	AbstractMessageQueue(name),
 	ready_(false) {
-	string down_stream_queue_name = GetName() + kDownStreamSuffix;
-	string up_stream_queue_name = GetName() + kDownStreamSuffix;
+	string down_stream_queue_name = GetUpStreamName();
+	string up_stream_queue_name = GetDownStreamName();
 	struct mq_attr attribute;
 	attribute.mq_flags = 0;
 	attribute.mq_maxmsg = kMaxMessageNumber;
@@ -33,7 +26,7 @@ NRTMessageQueue::~NRTMessageQueue() {
 	mq_close(up_stream_queue_descriptor_);
 }
 
-error_condition NRTMessageQueue::Send(Message& message) {
+error_condition NRTMessageQueue::Send(const Message& message) {
 	if (!ready_)
 		return make_error_condition(errc::broken_pipe);
 	vector<uint8_t> buffer = message.GetRawMessage();

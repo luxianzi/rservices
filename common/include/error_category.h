@@ -1,10 +1,3 @@
-/*
- * ErrorCategory.h
- *
- *  Created on: 2020Äê8ÔÂ22ÈÕ
- *      Author: Luxianzi
- */
-
 #ifndef ERRORCATEGORY_H_
 #define ERRORCATEGORY_H_
 
@@ -16,6 +9,10 @@ enum class ErrorCode {
 	kSuccess = 0,
 	kKeyReserved,
 	kMessageQueueNotReady,
+	kMessageParseError,
+	kInterfaceNotSpecified,
+	kBitRateNotSpecified,
+	kControlModeNotSpecified,
 	kLast
 };
 namespace std {
@@ -33,6 +30,14 @@ public:
 				return "Key is reserved";
 			case ErrorCode::kMessageQueueNotReady:
 				return "Message queue not ready";
+			case ErrorCode::kMessageParseError:
+				return "Message parse error";
+			case ErrorCode::kInterfaceNotSpecified:
+				return "Interface not specified";
+			case ErrorCode::kBitRateNotSpecified:
+				return "Bit rate not specified";
+			case ErrorCode::kControlModeNotSpecified:
+				return "Control mode not specified";
 			default:
 				return "Unknown error";
 		}

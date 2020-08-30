@@ -9,4 +9,4 @@ add_executable(rservices ./application/main.cpp)
 
 target_link_libraries(rservices common)
 
-set(CMAKE_CXX_STANDARD_LIBRARIES -lpthread)
+set(CMAKE_CXX_STANDARD_LIBRARIES "-lpthread -lrt")

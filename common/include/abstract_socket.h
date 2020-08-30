@@ -1,10 +1,3 @@
-/*
- * AbstractSocket.h
- *
- *  Created on: 2020��8��22��
- *      Author: Luxianzi
- */
-
 #ifndef ABSTRACTSOCKET_H_
 #define ABSTRACTSOCKET_H_
 
@@ -21,7 +14,7 @@ class AbstractSocket {
 public:
 	AbstractSocket() {}
 	AbstractSocket(SocketConfig& config) {}
-	virtual ~AbstractSocket() = 0;
+	virtual ~AbstractSocket() {};
 
 	virtual error_condition	ReConfig(SocketConfig& config) = 0;
 	virtual error_condition Read(vector<uint8_t>& buffer) = 0;
