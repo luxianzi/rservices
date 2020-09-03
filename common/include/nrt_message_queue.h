@@ -2,6 +2,7 @@
 #define NRTMESSAGEQUEUE_H_
 
 #include <mqueue.h>
+#include "rservice.h"
 #include "abstract_message_queue.h"
 
 class NRTMessageQueue: public AbstractMessageQueue {

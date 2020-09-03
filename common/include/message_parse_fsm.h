@@ -11,10 +11,10 @@
 #include <boost/msm/back/state_machine.hpp>
 #include <boost/msm/front/state_machine_def.hpp>
 #include <boost/msm/front/functor_row.hpp>
+#include "rservice.h"
 
 // TODO: Change the state machine definition to UML
 
-using namespace std;
 namespace msmf = boost::msm::front;
 namespace msmb = boost::msm::back;
 namespace mpl = boost::mpl;
@@ -168,4 +168,5 @@ private:
 };
 
 typedef msmb::state_machine<MessageParseFSMFront> MessageParseFSM;
+
 #endif

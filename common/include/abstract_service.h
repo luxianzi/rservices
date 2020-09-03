@@ -1,12 +1,11 @@
 #ifndef ABSTRACT_SERVICE_H_
 #define ABSTRACT_SERVICE_H_
 
+#include "rservice.h"
 #include "message.h"
 #include "abstract_message_queue.h"
 #include "abstract_thread.h"
 #include "error_category.h"
-
-using namespace std;
 
 class AbstractService {
 public:

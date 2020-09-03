@@ -1,7 +1,6 @@
 #include <algorithm>
 #include "message.h"
 #include "message_parse_fsm.h"
-#include "error_category.h"
 
 Message::Message() {
 	SetBroadcasting(false);

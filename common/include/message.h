@@ -2,12 +2,11 @@
 #define MESSAGE_H_
 
 #include <stdint.h>
-#include <system_error>
 #include <string>
 #include <vector>
 #include <tuple>
-
-using namespace std;
+#include "rservice.h"
+#include "error_category.h"
 
 class Message {
 public:

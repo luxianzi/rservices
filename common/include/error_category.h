@@ -2,8 +2,7 @@
 #define ERRORCATEGORY_H_
 
 #include <system_error>
-
-using namespace std;
+#include "rservice.h"
 
 enum class ErrorCode {
 	kSuccess = 0,

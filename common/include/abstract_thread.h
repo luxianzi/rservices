@@ -3,8 +3,7 @@
 
 #include <atomic>
 #include <functional>
-
-using namespace std;
+#include "rservice.h"
 
 using WorkFunction = function<void()>;
 

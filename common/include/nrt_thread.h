@@ -2,10 +2,8 @@
 #define NRTTHREAD_H_
 
 #include <thread>
-#include <atomic>
+#include "rservice.h"
 #include "abstract_thread.h"
-
-using namespace std;
 
 class NRTThread: public AbstractThread {
 public:

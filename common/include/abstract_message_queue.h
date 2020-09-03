@@ -4,9 +4,8 @@
 #include <stdint.h>
 #include <system_error>
 #include <vector>
+#include "rservice.h"
 #include "message.h"
-
-using namespace std;
 
 class AbstractMessageQueue {
 public:

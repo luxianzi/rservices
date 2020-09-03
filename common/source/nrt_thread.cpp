@@ -1,4 +1,3 @@
-#include <iostream>
 #include "nrt_thread.h"
 
 NRTThread::NRTThread() :
