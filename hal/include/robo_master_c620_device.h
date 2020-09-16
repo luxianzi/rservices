@@ -93,12 +93,13 @@ private:
 			static const unsigned int kMotors = 4;
 			buffer.resize(kMotors * sizeof(int16_t));
 			fill(buffer.begin(), buffer.end(), 0);
-			for (int i = 0; i < max(kMotors, \
+			for (int i = 0; i < min(kMotors, \
 					static_cast<unsigned int>(currents.size())); i++) {
 				int value = currents[i];
 				value = value < 32767 ? value : 32767;
 				value = value > -32768 ? value : -32768;
-				copy(reinterpret_cast<uint16_t*>(&value), reinterpret_cast<uint16_t*>(&value) + 1, &buffer[i * sizeof(int16_t)]);
+				buffer[i * sizeof(int16_t)] = value >> 8;
+				buffer[i * sizeof(int16_t) + 1] = value;
 			}
 		}
 		vector<uint8_t> buffer;
