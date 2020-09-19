@@ -10,7 +10,7 @@
 class AbstractDevice {
 public:
 	AbstractDevice() :
-		is_initiated_(false),
+		is_initialized_(false),
 		is_busy_(false) { }
 	virtual ~AbstractDevice() { }
 
@@ -29,15 +29,15 @@ public:
 	}
 	virtual error_condition Get(const string& key, \
 			vector<uint8_t>& result) = 0;
-	virtual bool IsInitiated() { return is_initiated_.load(); }
+	virtual bool IsInitialized() { return is_initialized_.load(); }
 	virtual bool IsBusy() { return is_busy_.load(); }
-	virtual void SetInitiated() { is_initiated_.store(true); }
-	virtual void ClearInitiated() { is_initiated_.store(false); }
+	virtual void SetInitialized() { is_initialized_.store(true); }
+	virtual void ClearInitialized() { is_initialized_.store(false); }
 	virtual void SetBusy() { is_busy_.store(true); }
 	virtual void ClearBusy() { is_busy_.store(false); }
 
 private:
-	atomic_bool is_initiated_;
+	atomic_bool is_initialized_;
 	atomic_bool is_busy_;
 };
 

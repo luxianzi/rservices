@@ -7,4 +7,9 @@
 using namespace std;
 using CommonKeyPairs = map<string, string>;
 
+namespace Config {
+	static const constexpr char* kMotionServiceName = "motion";
+	static const constexpr char* kRemoteControlServerName = "remote_control";
+};
+
 #endif /* RSERVICE_H_ */

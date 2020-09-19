@@ -1,12 +1,20 @@
 #include "rservice.h"
-#include "robo_master_c620_device.h"
-#include "logger.h"
+#include "message_switch.h"
+#include "motion_service.h"
+#include "remote_control_service.h"
 
 int main(int argc, char* argv[])
 {
-	Logger logger;
+	MessageSwitch message_switch;
+	MotionService motion_service;
+	RemoteControlService remote_control_service("/dev/input/event5");
 
-	logger.Log(Logger::kInfo, "hello world", kCodeLocation);
+	message_switch.RegisterChannel(motion_service.GetMessageQueueName());
+	message_switch.RegisterChannel(remote_control_service.GetMessageQueueName());
+
+	while (true) {
+		this_thread::sleep_for(chrono::milliseconds(1000));
+	}
 
 	return 0;
 }

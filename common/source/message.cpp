@@ -16,10 +16,10 @@ Message::Message(const vector<uint8_t>& buffer) {
 }
 
 Message::~Message() {
-	// TODO Auto-generated destructor stub
+
 }
 
-error_condition Message::SetItem(const string key, const int value, \
+error_condition Message::SetItem(const string& key, const int value, \
 		const bool force) {
 	if (!force && IsReservedKey(key))
 		return make_error_condition(ErrorCode::kKeyReserved);
@@ -28,7 +28,7 @@ error_condition Message::SetItem(const string key, const int value, \
 	return kNoError;
 }
 
-error_condition Message::SetItem(const string key, const bool value, \
+error_condition Message::SetItem(const string& key, const bool value, \
 		const bool force) {
 	if (!force && IsReservedKey(key))
 		return make_error_condition(ErrorCode::kKeyReserved);
@@ -37,7 +37,7 @@ error_condition Message::SetItem(const string key, const bool value, \
 	return kNoError;
 }
 
-error_condition Message::SetItem(const string key, const double value, \
+error_condition Message::SetItem(const string& key, const double value, \
 		const bool force) {
 	if (!force && IsReservedKey(key))
 		return make_error_condition(ErrorCode::kKeyReserved);
@@ -46,7 +46,7 @@ error_condition Message::SetItem(const string key, const double value, \
 	return kNoError;
 }
 
-error_condition Message::SetItem(const string key, const string& value, \
+error_condition Message::SetItem(const string& key, const string& value, \
 		const bool force) {
 	if (!force && IsReservedKey(key))
 		return make_error_condition(ErrorCode::kKeyReserved);
@@ -55,7 +55,7 @@ error_condition Message::SetItem(const string key, const string& value, \
 	return kNoError;
 }
 
-error_condition Message::SetItem(const string key, \
+error_condition Message::SetItem(const string& key, \
 		const vector<uint8_t>& value, const bool force) {
 	if (!force && IsReservedKey(key))
 		return make_error_condition(ErrorCode::kKeyReserved);
@@ -64,7 +64,7 @@ error_condition Message::SetItem(const string key, \
 	return kNoError;
 }
 
-error_condition Message::QueryItem(const string key, int& result) {
+error_condition Message::QueryItem(const string& key, int& result) {
 	MessageItem item;
 	if (!FindAndCheckItem(key, kInteger, sizeof(int), item))
 		return make_error_condition(errc::invalid_argument);
@@ -72,7 +72,7 @@ error_condition Message::QueryItem(const string key, int& result) {
 	return kNoError;
 }
 
-error_condition Message::QueryItem(const string key, bool& result) {
+error_condition Message::QueryItem(const string& key, bool& result) {
 	MessageItem item;
 	if (!FindAndCheckItem(key, kBool, sizeof(uint8_t), item))
 		return make_error_condition(errc::invalid_argument);
@@ -80,7 +80,7 @@ error_condition Message::QueryItem(const string key, bool& result) {
 	return kNoError;
 }
 
-error_condition Message::QueryItem(const string key, double& result) {
+error_condition Message::QueryItem(const string& key, double& result) {
 	MessageItem item;
 	if (!FindAndCheckItem(key, kDouble, sizeof(double), item))
 		return make_error_condition(errc::invalid_argument);
@@ -88,7 +88,7 @@ error_condition Message::QueryItem(const string key, double& result) {
 	return kNoError;
 }
 
-error_condition Message::QueryItem(const string key, string& result) {
+error_condition Message::QueryItem(const string& key, string& result) {
 	MessageItem item;
 	if (!FindAndCheckItem(key, kString, 0, item))
 		return make_error_condition(errc::invalid_argument);
@@ -97,7 +97,7 @@ error_condition Message::QueryItem(const string key, string& result) {
 	return kNoError;
 }
 
-error_condition Message::QueryItem(const string key, vector<uint8_t>& result) {
+error_condition Message::QueryItem(const string& key, vector<uint8_t>& result) {
 	MessageItem item;
 	if (!FindAndCheckItem(key, kData, 0, item))
 		return make_error_condition(errc::invalid_argument);

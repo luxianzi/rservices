@@ -18,7 +18,9 @@ RoboMasterC620Device::RoboMasterC620Device() :
 		{"bit_rate", "1000000"},
 		{"control_mode", "triple-sampling on"}
 	};
-	ReConfig(config);
+	if (ReConfig(config) != kNoError)
+		return;
+	SetInitialized();
 	can_receive_thread_.Start();
 	can_transmit_thread_.Start();
 }
@@ -58,8 +60,10 @@ error_condition RoboMasterC620Device::Get(const string& key, unsigned int& resul
 }
 
 void RoboMasterC620Device::ReceiveWork() {
-	if (!can_socket_.IsConnected())
+	if (!IsInitialized()) {
+		this_thread::sleep_for(chrono::milliseconds(10));
 		return;
+	}
 	vector<uint8_t> buffer;
 	if (can_socket_.Read(buffer) != kNoError)
 		return;
@@ -82,8 +86,10 @@ void RoboMasterC620Device::ReceiveWork() {
 }
 
 void RoboMasterC620Device::TransmitWork() {
-	if (!can_socket_.IsConnected())
+	if (!IsInitialized()) {
+		this_thread::sleep_for(chrono::milliseconds(10));
 		return;
+	}
 	LoopMode loop_mode = static_cast<LoopMode>(loop_mode_.load());
 	vector<int> currents(kMaxMotorCount);
 	fill(currents.begin(), currents.end(), 0);

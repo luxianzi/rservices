@@ -29,11 +29,8 @@ public:
 	virtual error_condition ReceiveMessage(Message& message) {
 		return message_queue_.Receive(message);
 	}
-	virtual string GetUpStreamMessageQueueName() {
-		return message_queue_.GetUpStreamName();
-	}
-	virtual string GetDownStreamMessageQueueName() {
-		return message_queue_.GetDownStreamName();
+	virtual string GetMessageQueueName() {
+		return message_queue_.GetName();
 	}
 
 private:
