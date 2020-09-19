@@ -26,8 +26,6 @@ public:
 	virtual error_condition Get(const string& key, unsigned int& result);
 	virtual error_condition Get(const string& key, vector<uint8_t>& result);
 
-	void IsUpdated();
-
 	string FindKeyName(int key_code);
 	string FindAbsName(int abs_code);
 

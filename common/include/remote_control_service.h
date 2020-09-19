@@ -8,7 +8,7 @@
 
 class RemoteControlService: public AbstractService {
 public:
-	RemoteControlService(const string& device_file_name);
+	RemoteControlService(const string& device_name);
 	virtual ~RemoteControlService();
 	virtual void Work();
 

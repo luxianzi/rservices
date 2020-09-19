@@ -6,22 +6,17 @@
 #include <linux/input.h>
 #include "hid_device.h"
 
-HIDDevice::HIDDevice(const string& name) :
+HIDDevice::HIDDevice(const string& device_name) :
 	hid_receive_thread_([&](){ this->ReceiveWork(); }) {
 	CommonKeyPairs config = {
-			{"hid_name", name},
+			{"hid_name", device_name},
 	};
 	if (ReConfig(config) != kNoError)
 		return;
-	SetInitialized();
 	hid_receive_thread_.Start();
 }
 
 HIDDevice::~HIDDevice() {
-
-}
-
-void HIDDevice::IsUpdated() {
 
 }
 
@@ -58,15 +53,15 @@ error_condition HIDDevice::ReConfig(const CommonKeyPairs &config) {
 		device_name.resize(256);
 		ioctl(hid_fd, EVIOCGNAME(device_name.size()), device_name.data());
 		if (string(device_name.c_str()) != \
-				string(hid_name->second.c_str()) == 0) {
+				string(hid_name->second.c_str())) {
 			close(hid_fd);
-			return make_error_condition(errc::invalid_argument);
+			continue;
 		}
 		hid_fd_ = hid_fd;
 		SetInitialized();
 		break;
 	}
-	return kNoError;;
+	return kNoError;
 }
 
 error_condition HIDDevice::DeConfig() {

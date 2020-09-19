@@ -15,8 +15,10 @@ MotionService::~MotionService() {
 void MotionService::Work() {
 	Message message;
 	ReceiveMessage(message);
-	int value;
-	message.QueryItem("key", value);
+	int angle, speed;
+	message.QueryItem("angle", angle);
+	message.QueryItem("speed", speed);
 	Logger logger;
-	logger.Log(Logger::kInfo, "New message: " +  to_string(value), kCodeLocation);
+	logger.Log(Logger::kInfo, "Angle: " + to_string(angle) + ", Speed: " + \
+			to_string(speed));
 }

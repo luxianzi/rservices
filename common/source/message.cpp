@@ -68,7 +68,8 @@ error_condition Message::QueryItem(const string& key, int& result) {
 	MessageItem item;
 	if (!FindAndCheckItem(key, kInteger, sizeof(int), item))
 		return make_error_condition(errc::invalid_argument);
-	copy(get<2>(item).begin(), get<2>(item).begin() + sizeof(int), &result);
+	copy(get<2>(item).begin(), get<2>(item).begin() + sizeof(int), \
+			reinterpret_cast<uint8_t*>(&result));
 	return kNoError;
 }
 
@@ -84,7 +85,8 @@ error_condition Message::QueryItem(const string& key, double& result) {
 	MessageItem item;
 	if (!FindAndCheckItem(key, kDouble, sizeof(double), item))
 		return make_error_condition(errc::invalid_argument);
-	copy(get<2>(item).begin(), get<2>(item).begin() + sizeof(double), &result);
+	copy(get<2>(item).begin(), get<2>(item).begin() + sizeof(double), \
+			reinterpret_cast<uint8_t*>(&result));
 	return kNoError;
 }
 

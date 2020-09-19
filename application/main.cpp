@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 {
 	MessageSwitch message_switch;
 	MotionService motion_service;
-	RemoteControlService remote_control_service("/dev/input/event5");
+	RemoteControlService remote_control_service("BETOP CONTROLLER");
 
 	message_switch.RegisterChannel(motion_service.GetMessageQueueName());
 	message_switch.RegisterChannel(remote_control_service.GetMessageQueueName());
