@@ -10,6 +10,7 @@
 #include "can_socket.h"
 #include "abstract_thread.h"
 #include "nrt_thread.h"
+#include "pid_controller.h"
 
 class RoboMasterC620Device: public AbstractSocketDevice {
 public:
@@ -123,6 +124,7 @@ private:
 	vector<MotorData> motors_;
 	atomic_int loop_mode_;
 	atomic_int motor_index_;
+	vector<PIDController> motor_speed_pid_;
 };
 
 #endif /* ROBO_MASTER_C620_DEVICE_H_ */

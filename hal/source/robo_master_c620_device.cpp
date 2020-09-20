@@ -10,9 +10,14 @@ RoboMasterC620Device::RoboMasterC620Device() :
 	motor_count_(kDefaultMotorCount),
 	motors_(kMaxMotorCount),
 	loop_mode_(kNone),
-	motor_index_(0) {
+	motor_index_(0),
+	motor_speed_pid_({}) {
 	MotorData zero_motor_data = {};
 	fill(motors_.begin(), motors_.end(), zero_motor_data);
+	for (int i = 0; i < kMaxMotorCount; i++) {
+		motor_speed_pid_.emplace_back(20, 0, 0);
+		motor_speed_pid_[i].SetIntegratorLimit(10000, -10000);
+	}
 	CommonKeyPairs config = {
 		{"interface", "can0"},
 		{"bit_rate", "1000000"},
@@ -101,7 +106,10 @@ void RoboMasterC620Device::TransmitWork() {
 					currents[i] = motors_[i].target_current;
 				break;
 			case kSpeed:
-					currents[i] = 100 * (motors_[i].target_speed - motors_[i].feedback_speed);
+					currents[i] = static_cast<int>(
+							motor_speed_pid_[i].Calculate(\
+							motors_[i].target_speed, \
+							motors_[i].feedback_speed));
 				break;
 			default:
 				break;
