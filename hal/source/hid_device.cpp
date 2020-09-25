@@ -61,6 +61,8 @@ error_condition HIDDevice::ReConfig(const CommonKeyPairs &config) {
 		SetInitialized();
 		break;
 	}
+	if (!IsInitialized())
+		return make_error_condition(errc::address_not_available);
 	return kNoError;
 }
 
