@@ -1,4 +1,7 @@
 .project
 .cproject
 /build
+/release
+/Debug/
+/Release/
 
