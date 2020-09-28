@@ -22,6 +22,8 @@ CANSocket::CANSocket(CommonKeyPairs& config) {
 CANSocket::~CANSocket() {
 	if (IsConnected())
 		::close(can_socket_);
+
+	DeConfig();
 }
 
 error_condition	CANSocket::ReConfig(const CommonKeyPairs& config) {
