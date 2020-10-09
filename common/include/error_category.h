@@ -45,6 +45,9 @@ public:
 
 static const ErrorCategory kErrorCategory;
 static const error_condition kNoError(errc(0));
+static const error_condition kInvalidArgument(errc::invalid_argument);
+static const error_condition kOperationNotSupported(\
+		errc::operation_not_supported);
 
 __attribute__((weak)) error_condition make_error_condition(ErrorCode e) {
 	return error_condition(static_cast<int>(e), kErrorCategory);

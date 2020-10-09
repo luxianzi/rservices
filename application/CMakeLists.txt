@@ -5,4 +5,4 @@ aux_source_directory(../hal/source hal)
 
 add_executable(rservices ./main.cpp ${hal} ${common})
 
-set(CMAKE_CXX_STANDARD_LIBRARIES "-lpthread -lrt")
+set(CMAKE_CXX_STANDARD_LIBRARIES "-lpthread -lrt -lboost_system")

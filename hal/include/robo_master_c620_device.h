@@ -26,12 +26,18 @@ public:
 			const unsigned int value);
 	virtual error_condition Set(const string& key, \
 			const vector<uint8_t>& value) {
-		return make_error_condition(errc::operation_not_supported);
+		return kOperationNotSupported;
+	}
+	virtual error_condition Set(const string& key, const string& value) {
+		return kOperationNotSupported;
 	}
 	virtual error_condition Get(const string& key, unsigned int& result);
 	virtual error_condition Get(const string& key, \
 			vector<uint8_t>& result) {
-		return make_error_condition(errc::operation_not_supported);
+		return kOperationNotSupported;
+	}
+	virtual error_condition Get(const string& key, string& value) {
+		return kOperationNotSupported;
 	}
 	virtual void ReceiveWork();
 	virtual void TransmitWork();
