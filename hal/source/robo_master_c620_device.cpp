@@ -61,7 +61,7 @@ error_condition RoboMasterC620Device::Set(const string& key, const unsigned int 
 }
 
 error_condition RoboMasterC620Device::Get(const string& key, unsigned int& result) {
-
+	return kNoError;
 }
 
 void RoboMasterC620Device::ReceiveWork() {
