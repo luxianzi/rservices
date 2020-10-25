@@ -1,4 +1,4 @@
-#include "../include/pid_controller.h"
+#include "pid_controller.h"
 
 PIDController::PIDController(double kp, double ki, double kd) :
 	kp_(kp),
@@ -35,20 +35,28 @@ double PIDController::Calculate(double target, double feed_back) {
 	return output;
 }
 
-void PIDController::SetOutputLimit(double upper_limit, double lower_limit) {
+error_condition PIDController::SetOutputLimit(double upper_limit, \
+		double lower_limit) {
+	if (upper_limit <= lower_limit)
+		return make_error_condition(errc::invalid_argument);
 	output_limit_enable_ = true;
 	output_upper_limit_ = upper_limit;
 	output_lower_limit_ = lower_limit;
+	return kNoError;
 }
 
 void PIDController::DisableOutputLimit() {
 	output_limit_enable_ = false;
 }
 
-void PIDController::SetIntegratorLimit(double upper_limit, double lower_limit) {
+error_condition PIDController::SetIntegratorLimit(double upper_limit, \
+		double lower_limit) {
+	if (upper_limit <= lower_limit)
+		return make_error_condition(errc::invalid_argument);
 	integrator_limit_enable_ = true;
 	integrator_upper_limit_ = upper_limit;
 	integrator_lower_limit_ = lower_limit;
+	return kNoError;
 }
 
 void PIDController::DisableIntegratorLimit() {
