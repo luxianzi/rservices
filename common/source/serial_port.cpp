@@ -189,7 +189,6 @@ error_condition SerialPort::Get(const string& key, vector<uint8_t>& result) {
 			serial_buffer_, result) != kNoError) {
 		return make_error_condition(errc::io_error);
 	}
-
 	return kNoError;
 }
 

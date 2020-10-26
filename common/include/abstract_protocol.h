@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+=======
+/*
+ * abstract_protocol.h
+ *
+ *  Created on: 2020Äê9ÔÂ30ÈÕ
+ *      Author: duanning
+ */
+
+>>>>>>> duanruining
 #ifndef ABSTRACT_PROTOCOL_H_
 #define ABSTRACT_PROTOCOL_H_
 
@@ -15,6 +25,7 @@ public:
 			const vector<uint8_t>& buffer, vector<uint8_t>& packed_data) = 0;
 	virtual error_condition UnpackFrame(\
 			const vector<uint8_t>& buffer, vector<uint8_t>& unpacked_data) = 0;
+
 protected:
 	virtual bool IsFrameComplete(const vector<uint8_t>& buffer) = 0;
 	virtual bool IsFrameValid(const vector<uint8_t>& buffer) = 0;
