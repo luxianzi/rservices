@@ -1,15 +1,17 @@
 #ifndef PID_CONTROLLER_H_
 #define PID_CONTROLLER_H_
 
+#include "error_category.h"
+
 class PIDController {
 public:
 	PIDController(double kp, double ki, double kd);
 	virtual ~PIDController();
 
 	virtual double Calculate(double target, double feed_back);
-	virtual void SetOutputLimit(double upper_limit, double lower_limit);
+	virtual error_condition SetOutputLimit(double upper_limit, double lower_limit);
 	virtual void DisableOutputLimit();
-	virtual void SetIntegratorLimit(double upper_limit, double lower_limit);
+	virtual error_condition SetIntegratorLimit(double upper_limit, double lower_limit);
 	virtual void DisableIntegratorLimit();
 
 private:

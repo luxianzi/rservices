@@ -23,12 +23,14 @@ public:
 	}
 	virtual error_condition Set(const string& key, \
 			const vector<uint8_t>& value) = 0;
+	virtual error_condition Set(const string& key, const string& value) = 0;
 	virtual error_condition Get(const string& key, unsigned int& result) = 0;
 	virtual error_condition Get(const string& key, int& result) {
 		return Get(key, reinterpret_cast<unsigned int&>(result));
 	}
 	virtual error_condition Get(const string& key, \
 			vector<uint8_t>& result) = 0;
+	virtual error_condition Get(const string& key, string& value) = 0;
 	virtual bool IsInitialized() { return is_initialized_.load(); }
 	virtual bool IsBusy() { return is_busy_.load(); }
 	virtual void SetInitialized() { is_initialized_.store(true); }
