@@ -102,13 +102,13 @@ error_condition SerialPort::ReConfig(const CommonKeyPairs &config) {
 		serial_port_.set_option(serial_port::flow_control(\
 				serial_port::flow_control::none), ec);
 	else {
-		if (key_value->second == "none")
+		if (to_lower(key_value->second) == "none")
 			serial_port_.set_option(serial_port::flow_control(\
 					serial_port::flow_control::none), ec);
-		else if (key_value->second == "software")
+		else if (to_lower(key_value->second) == "software")
 			serial_port_.set_option(serial_port::flow_control(\
 					serial_port::flow_control::software), ec);
-		else if (key_value->second == "hardware")
+		else if (to_lower(key_value->second) == "hardware")
 			serial_port_.set_option(serial_port::flow_control(\
 					serial_port::flow_control::hardware), ec);
 		else
@@ -123,6 +123,20 @@ error_condition SerialPort::ReConfig(const CommonKeyPairs &config) {
 
 error_condition SerialPort::DeConfig() {
 	serial_port_.close();
+	return kNoError;
+}
+
+error_condition SerialPort::Set(const string&key, unsigned int value) {
+	if (key.empty())
+		return kInvalidArgument;
+
+	if (key == kAddress)
+		application_protocol_.SetAddress(value);
+	else if (key == kAddressSize)
+		application_protocol_.SetAddressSize(value);
+	else
+		return kInvalidArgument;
+
 	return kNoError;
 }
 
@@ -151,10 +165,22 @@ error_condition SerialPort::Set(const string& key, \
 	if (key != kData)
 		return kInvalidArgument;
 
-	vector<uint8_t> data;
+	vector<uint8_t> data(data_size_);
 	application_protocol_.PackFrame(value, data);
 	if (serial_port_.write_some(buffer(data), ec) == 0)
 		return make_error_condition(errc::io_error);
+
+	return kNoError;
+}
+
+error_condition SerialPort::Get(const string& key, unsigned int& result) {
+	if (!IsInitialized())
+		return make_error_condition(errc::no_such_device);
+
+	if (key == kAddress)
+		result = application_protocol_.GetAddress();
+	if (key == kAddressSize)
+		result = application_protocol_.GetAddressSize();
 
 	return kNoError;
 }
@@ -170,9 +196,7 @@ error_condition SerialPort::Get(const string& key, string& value) {
 	return kNoError;
 }
 
-/*
- * @brief SerialPort support half-duplex communication
- */
+//@brief SerialPort support half-duplex communication
 error_condition SerialPort::Get(const string& key, vector<uint8_t>& result) {
 	if (!IsInitialized())
 		return make_error_condition(errc::no_such_device);
@@ -181,12 +205,24 @@ error_condition SerialPort::Get(const string& key, vector<uint8_t>& result) {
 		return kInvalidArgument;
 
 	boost::system::error_code ec;
-	vector<uint8_t> data;
-	if (serial_port_.read_some(buffer(data), ec) <= 0)
-		return make_error_condition(errc::no_message);
-	serial_buffer_.insert(serial_buffer_.end(), data.begin(), data.end());
+	bool data_available = false;
+	deadline_timer timeout(io_s_);
+	vector<uint8_t> data(data_size_);
+
+	io_s_.reset();
+	serial_port_.async_read_some(buffer(data), \
+			boost::bind(&ReadCallback, boost::ref(data_available), \
+			boost::ref(timeout), boost::asio::placeholders::error, \
+			boost::asio::placeholders::bytes_transferred));
+
+	timeout.expires_from_now(boost::posix_time::milliseconds(timeout_ms_));
+	timeout.async_wait(boost::bind(&WaitCallback, \
+			boost::ref(serial_port_), boost::asio::placeholders::error));
+
+	io_s_.run();
+
 	if (application_protocol_.UnpackFrame(\
-			serial_buffer_, result) != kNoError) {
+			data, result) != kNoError) {
 		return make_error_condition(errc::io_error);
 	}
 
