@@ -5,6 +5,7 @@ RemoteControlService::RemoteControlService(const string& device_name) :
 	nrt_thread_(),
 	nrt_message_queue_(Config::kRemoteControlServerName),
 	hid_device_(device_name),
+	work_mode_(kUnknownMode),
 	AbstractService(nrt_thread_, nrt_message_queue_) {
 	Start();
 }

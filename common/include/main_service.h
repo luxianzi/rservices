@@ -5,7 +5,7 @@
 #include "abstract_service.h"
 #include "nrt_thread.h"
 #include "nrt_message_queue.h"
-//#include "main_service_fsm.h"
+#include "main_service_fsm.h"
 
 class MainService : public AbstractService {
 public:
@@ -16,6 +16,8 @@ public:
 private:
 	NRTThread nrt_thread_;
 	NRTMessageQueue nrt_message_queue_;
+	WorkingFSM work_fsm_;
+	WorkMode work_mode_;
 };
 
 #endif /* MAIN_SERVICE_H_ */
