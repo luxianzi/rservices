@@ -26,10 +26,12 @@ public:
 	static const constexpr char* kAddressSize = "address_size";
 
 	SerialPort(void);
+	SerialPort(AbstractProtocol& protocol);
 	virtual ~SerialPort();
 
 	virtual error_condition ReConfig(const CommonKeyPairs& config);
 	virtual error_condition DeConfig();
+
 	virtual error_condition Set(const string& key, const unsigned int value);
 	virtual error_condition Set(const string& key, \
 			const vector<uint8_t>& value);
@@ -38,14 +40,9 @@ public:
 	virtual error_condition Get(const string& key, vector<uint8_t>& result);
 	virtual error_condition Get(const string& key, string& value);
 
-protected:
-	DummyProtocol dummy_protocol_;
-	AbstractProtocol& application_protocol_;
-	SerialPort(AbstractProtocol& protocol);
-
 private:
-	static void ReadCallback(bool& data_available, deadline_timer& timeout, \
-			const boost::system::error_code& error, \
+	static void ReadCallback(bool& data_available, unsigned int& data_size, \
+			deadline_timer& timeout, const boost::system::error_code& error, \
 			std::size_t bytes_transferred) {
 		if (error || ! bytes_transferred) {
 			data_available = false;
@@ -53,6 +50,7 @@ private:
 		}
 		timeout.cancel();
 		data_available = true;
+		data_size = bytes_transferred;
 	}
 	static void WaitCallback(serial_port& serial, \
 			const boost::system::error_code& error) {
@@ -67,6 +65,9 @@ private:
 		kPortName, kData, kBaudRate, kCharacterSize, kParity, kStopBits,
 		kFlowControl
 	};
+	DummyProtocol dummy_protocol_;
+	AbstractProtocol& application_protocol_;
+
 	static const uint8_t data_size_ = 128;
 	static const uint8_t timeout_ms_ = 8;
 };

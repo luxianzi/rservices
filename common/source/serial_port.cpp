@@ -5,13 +5,13 @@ SerialPort::SerialPort(void):
 	serial_port_(io_s_) {
 }
 
-SerialPort::~SerialPort() {
-	serial_port_.close();
-}
-
 SerialPort::SerialPort(AbstractProtocol& protocol):
 	application_protocol_(protocol),
 	serial_port_(io_s_) {
+}
+
+SerialPort::~SerialPort() {
+	serial_port_.close();
 }
 
 error_condition SerialPort::ReConfig(const CommonKeyPairs &config) {
@@ -204,15 +204,16 @@ error_condition SerialPort::Get(const string& key, vector<uint8_t>& result) {
 	if (key != kData)
 		return kInvalidArgument;
 
-	boost::system::error_code ec;
 	bool data_available = false;
+	unsigned int data_size = 0;
 	deadline_timer timeout(io_s_);
 	vector<uint8_t> data(data_size_);
 
 	io_s_.reset();
 	serial_port_.async_read_some(buffer(data), \
 			boost::bind(&ReadCallback, boost::ref(data_available), \
-			boost::ref(timeout), boost::asio::placeholders::error, \
+			boost::ref(data_size), boost::ref(timeout), \
+			boost::asio::placeholders::error, \
 			boost::asio::placeholders::bytes_transferred));
 
 	timeout.expires_from_now(boost::posix_time::milliseconds(timeout_ms_));
@@ -221,6 +222,7 @@ error_condition SerialPort::Get(const string& key, vector<uint8_t>& result) {
 
 	io_s_.run();
 
+	data.resize(data_size);
 	if (application_protocol_.UnpackFrame(\
 			data, result) != kNoError) {
 		return make_error_condition(errc::io_error);

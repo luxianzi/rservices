@@ -35,7 +35,8 @@ public:
 
 protected:
 	virtual bool IsFrameComplete(const vector<uint8_t>& buffer) = 0;
-	virtual bool IsFrameValid(const vector<uint8_t>& buffer) = 0;
+	virtual bool ExtractValidData(const vector<uint8_t>& buffer,\
+				vector<uint8_t>& data) = 0;
 	virtual error_condition CalcCheckCode(\
 			const vector<uint8_t>& buffer, vector<uint8_t> check_code) = 0;
 	vector<uint8_t> address_;
