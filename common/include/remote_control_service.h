@@ -5,6 +5,7 @@
 #include "nrt_thread.h"
 #include "nrt_message_queue.h"
 #include "hid_device.h"
+#include "main_service_fsm.h"
 
 class RemoteControlService: public AbstractService {
 public:
@@ -16,6 +17,7 @@ private:
 	NRTThread nrt_thread_;
 	NRTMessageQueue nrt_message_queue_;
 	HIDDevice hid_device_;
+	WorkMode work_mode_;
 };
 
 #endif /* REMOTE_CONTROL_SERVICE_H_ */
